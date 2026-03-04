@@ -1,18 +1,15 @@
 <?php
 
 use App\Http\Controllers\HallController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('homepage', ['title' => 'Homepage']);
-});
 Route::get('/about', function () {
     return view('about', ['title' => 'About']);
 });
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'isAdmin']);
+
+Route::get('/', [HomeController::class, 'index']);
 
 Route::get('/hall', [HallController::class, 'index']);
 Route::get('/hall/book/{book:slug}', [HallController::class, 'singleBook']);
@@ -24,3 +21,9 @@ Route::get('/registration', [LoginController::class, 'registration'])->middlewar
 Route::post('/registration', [LoginController::class, 'store'])->middleware('guest');
 
 Route::post('logout', [LoginController::class, 'logout'])->middleware('auth');
+
+Route::prefix('dashboard')->middleware(['auth', 'isAdmin'])->group(function () {
+    Route::get('/', function () {
+        return view('dashboard.dashboard', ["title" => 'Dashboard']);
+    });
+});
