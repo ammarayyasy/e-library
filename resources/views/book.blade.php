@@ -23,7 +23,7 @@
             @endif
             
             <article class="prose max-w-none my-6">
-                {!! $book->body !!}
+                {{ $book->body }}
             </article>
     
             <a href="/hall" class="inline-block text-blue-500 hover:underline mt-4">← Back to blog</a>

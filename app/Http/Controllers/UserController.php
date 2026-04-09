@@ -58,24 +58,48 @@ class UserController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $user)
     {
-        //
+        $title = "User - Edit";
+
+        return view('dashboard.user.edit', compact('title', 'user'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $rules = [
+            'name' => 'required|max:255',
+            'password' => 'required|string|min:5',
+            'role' => 'required'
+        ];
+
+        if (request('slug') != $user->slug) {
+            $rules['slug'] = 'unique:users|required';
+        }
+        if (request('username') != $user->username) {
+            $rules['username'] = 'unique:users|required';
+        }
+        if (request('email') != $user->email) {
+            $rules['email'] = 'unique:users|required';
+        }
+
+        $validatedData = $request->validate($rules);
+
+        User::where('slug', $user->slug)->update($validatedData);
+
+        return redirect('/dashboard/user')->with('success', 'Data berhasil diubah!!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        //
+        User::destroy($user->id);
+
+        return redirect('/dashboard/user')->with('success', 'Data pengguna berhasil dihapus!');
     }
 }
