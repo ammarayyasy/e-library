@@ -63,6 +63,14 @@
             <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
             @enderror
         </div>
+        <!-- message Field -->
+        <div class="hidden" id="messageField">
+          <label for="message" class="block text-sm font-medium text-gray-700">Pesan</label>
+          <textarea rows="4" type="text" name="message" class="mt-1 p-2 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm @error('message') border-red-500 @enderror" placeholder="Tulis alasan anda menolak.."></textarea>
+          @error('message')
+            <p class="mt-1 text-sm text-red-500">{{ $message }}</p>
+          @enderror
+        </div>
         <!-- Submit Button -->
         <div>
           <button type="submit"
@@ -74,5 +82,24 @@
     </div>
   </div>
 </div>
+
+<script>
+    const statusSelect = document.getElementById('status');
+    const messageField = document.getElementById('messageField');
+
+    function toggleMessageField() {
+        if (statusSelect.value === 'ditolak') {
+            messageField.classList.remove('hidden');
+        } else {
+            messageField.classList.add('hidden');
+        }
+    }
+
+    // jalan saat halaman load
+    toggleMessageField();
+
+    // jalan saat user ganti select
+    statusSelect.addEventListener('change', toggleMessageField);
+</script>
 
 @endsection
